@@ -1,25 +1,39 @@
 package me.kjs.apimanagement.user.presentation
 
-class UserForm {
-	class Create {
-		class Request {
+import com.sun.istack.NotNull
 
-		}
+interface UserForm {
+	interface Create {
+		data class Request(
+			@NotNull
+			val email: String,
+			@NotNull
+			val name: String,
+			@NotNull
+			val password: String,
+		)
 
-		class Response {
-
-		}
+		data class Response(
+			val email: String,
+			val name: String,
+		)
 	}
 
-	class FindOne {
-		class Response {
-
+	interface Find {
+		interface Response {
+			data class One(
+				val email: String,
+				val name: String,
+			)
 		}
 
 	}
 
-	class UpdatePart {
-		class Request {
+	interface UpdatePart {
+		class Request(
+			val updateCommand: UpdateCommand,
+			val value: String,
+		) {
 
 			enum class UpdateCommand {
 				PASSWORD,

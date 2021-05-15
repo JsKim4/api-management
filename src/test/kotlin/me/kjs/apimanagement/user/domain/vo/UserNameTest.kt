@@ -5,7 +5,8 @@ import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 
-internal class UserNameTest {
+@DisplayName("유저 이름 테스트")
+class UserNameTest {
 
 	companion object {
 		const val name = "김준섭"

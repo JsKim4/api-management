@@ -1,20 +1,27 @@
 package me.kjs.apimanagement.user.presentation
 
-class UserAuthForm {
-	class Create {
-		class Request {
+import javax.validation.constraints.NotEmpty
 
-		}
+interface UserAuthForm {
+	interface Create {
+		data class Request(
+			@NotEmpty
+			val email: String,
+			val password: String
+		)
 
 	}
 
-	class Token {
-		class Response {
-
-		}
+	interface Token {
+		data class Response(
+			val accessToken: String,
+			val refreshToken: String,
+			val accessTokenExpiredSecond: Long,
+			val refreshTokenExpiredSecond: Long,
+		)
 	}
 
-	class Refresh {
+	interface Refresh {
 		class Request {
 
 		}

@@ -7,7 +7,8 @@ import org.junit.jupiter.api.Test
 import java.time.LocalDateTime
 import java.util.*
 
-internal class UserTest {
+@DisplayName("유저 도메인 테스트") 
+class UserTest {
 	companion object {
 		const val name = "김준섭"
 		const val email = "ggi4111@naver.com"

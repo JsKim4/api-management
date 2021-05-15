@@ -5,7 +5,8 @@ import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 
-internal class UserEmailTest {
+@DisplayName("유저 이메일 테스트")
+class UserEmailTest {
 
 	@Test
 	@DisplayName("유저 이메일 생성 테스트")

@@ -19,7 +19,7 @@ class UserRestController {
 	@ResponseStatus(HttpStatus.OK)
 	fun getUser(
 		@PathVariable userId: String,
-	): UserForm.FindOne.Response {
+	): UserForm.Find.Response.One {
 		TODO()
 	}
 
