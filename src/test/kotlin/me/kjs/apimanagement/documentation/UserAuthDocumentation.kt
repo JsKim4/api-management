@@ -73,4 +73,49 @@ class UserAuthDocumentation : DocumentationTestBase() {
 				)
 			)
 	}
+
+	@Test
+	@DisplayName("토큰 재발급 문서화")
+	fun refreshAccessTokenDocumentation() {
+
+		val refreshToken = UUID.randomUUID().toString()
+		val request = UserAuthForm.Refresh.Request(
+			refreshToken = refreshToken
+		)
+
+		val response = UserAuthForm.Token.Response(
+			accessToken = UUID.randomUUID().toString(),
+			accessTokenExpiredSecond = 12348603,
+			refreshToken = refreshToken,
+			refreshTokenExpiredSecond = 12348603
+		)
+
+		val id = generateId()
+
+		whenever(userAuthRestController.refreshAccessToken(any(), any())).thenReturn(response)
+
+		mockMvc.perform(
+			RestDocumentationRequestBuilders.post("/users/{userId}/auth/refresh", id)
+				.contentType(MediaType.APPLICATION_JSON) 
+				.content(request)
+		)
+			.andExpect(jsonPath("refreshToken").value(request.refreshToken))
+			.andDo(
+				document(
+					"refresh-user-auth",
+					pathParameters(
+						parameterWithName("userId").description("유저 아이디")
+					),
+					requestFields(
+						fieldWithPath("refreshToken").description("리프레시 토큰")
+					),
+					responseFields(
+						fieldWithPath("accessToken").description("엑세스 토큰"),
+						fieldWithPath("refreshToken").description("리프레시 토큰"),
+						fieldWithPath("accessTokenExpiredSecond").description("엑세스 토큰 남은 유효시간(초)"),
+						fieldWithPath("refreshTokenExpiredSecond").description("리프레시 토큰 남은 유효시간(초)")
+					)
+				)
+			)
+	}
 }

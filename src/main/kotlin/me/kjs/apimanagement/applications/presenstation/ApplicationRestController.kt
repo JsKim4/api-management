@@ -31,7 +31,7 @@ class ApplicationRestController {
 		TODO()
 	}
 
-	@PatchMapping("/{applicationId}/key")
+	@PatchMapping("/{applicationId}/refresh-key")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	fun refreshKey(
 		@PathVariable applicationId: String

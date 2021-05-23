@@ -22,9 +22,9 @@ interface UserAuthForm {
 	}
 
 	interface Refresh {
-		class Request {
-
-		}
+		class Request(
+			val refreshToken: String
+		)
 	}
 
 }

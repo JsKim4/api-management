@@ -25,10 +25,4 @@ class UserAuthRestController {
 		TODO()
 	}
 
-	@GetMapping
-	fun queryUserToken(
-		@PathVariable userId: String
-	): UserAuthForm.Token.Response {
-		TODO()
-	}
 }

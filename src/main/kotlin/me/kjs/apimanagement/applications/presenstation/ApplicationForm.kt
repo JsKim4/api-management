@@ -2,13 +2,17 @@ package me.kjs.apimanagement.applications.presenstation
 
 class ApplicationForm {
 	class Create {
-		class Response {
+		data class Response(
+			val title: String,
+			val content: String,
+			val clientId: String,
+			val secretKey: String
+		)
 
-		}
-
-		class Request {
-
-		}
+		data class Request(
+			val title: String,
+			val content: String
+		)
 
 	}
 

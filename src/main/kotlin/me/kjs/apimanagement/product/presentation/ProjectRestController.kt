@@ -1,17 +1,18 @@
 package me.kjs.apimanagement.product.presentation
 
 import org.springframework.http.HttpStatus
+import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/projects")
 class ProjectRestController {
 
-	@PostMapping
-	@ResponseStatus(HttpStatus.CREATED)
+	@PutMapping("/{projectCode}")
 	fun createProject(
-		@RequestBody request: ProjectForm.Create.Request
-	): ProjectForm.Create.Response {
+		@RequestBody request: ProjectForm.Put.Request,
+		@PathVariable projectCode: ProjectCode
+	): ResponseEntity<ProjectForm.Put.Response> {
 		TODO()
 	}
 
@@ -19,21 +20,17 @@ class ProjectRestController {
 	@ResponseStatus(HttpStatus.OK)
 	fun queryProjects(
 
-	): ProjectForm.Find.Response.Page {
+	): ProjectForm.Find.Response.All {
 		TODO()
 	}
 
-	@GetMapping("/{projectId}")
+	@GetMapping("/{projectCode}")
 	@ResponseStatus(HttpStatus.OK)
 	fun queryProject(
-		@PathVariable projectId: String
+		@PathVariable projectCode: ProjectCode
 	): ProjectForm.Find.Response.One {
 		TODO()
 	}
-
-
-
-
 
 
 }

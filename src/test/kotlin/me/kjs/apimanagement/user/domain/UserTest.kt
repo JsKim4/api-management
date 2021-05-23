@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test
 import java.time.LocalDateTime
 import java.util.*
 
-@DisplayName("유저 도메인 테스트") 
+@DisplayName("유저 도메인 테스트")
 class UserTest {
 	companion object {
 		const val name = "김준섭"
@@ -41,6 +41,5 @@ class UserTest {
 		user.putAuthToken(clientId, UUID.randomUUID().toString(), expiredDateTime)
 		assertFalse(user.validRefreshToken(clientId, refreshToken))
 	}
-
 
 }
