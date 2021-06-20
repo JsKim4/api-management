@@ -1,15 +1,23 @@
 package me.kjs.apimanagement.applications.presenstation
 
+import me.kjs.apimanagement.product.presentation.ProductCode
+
 class ApplicationProductForm {
 	class Create {
-		class Request {
+		data class Request(
+			val cause: String
+		)
 
-		}
+		data class Response(
+			val applicationId: String,
+			val productCode: ProductCode,
+			val processStatus: ProcessStatus,
+		)
 
-		class Response {
+	}
 
-		}
-
+	enum class ProcessStatus {
+		REQUESTED, PROCESSING, ACCEPTED, REJECTED
 	}
 
 }

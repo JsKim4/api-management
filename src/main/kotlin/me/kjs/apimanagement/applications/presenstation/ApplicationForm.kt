@@ -18,10 +18,18 @@ class ApplicationForm {
 
 	class Find {
 		class Response {
-			class One {
+			data class One(
+				val id: String,
+				val title: String,
+				val content: String,
+				val clientId: String,
+				val secretKey: String
+			)
 
-			}
-
+			data class Simple(
+				val id: String,
+				val title: String,
+			)
 		}
 
 	}

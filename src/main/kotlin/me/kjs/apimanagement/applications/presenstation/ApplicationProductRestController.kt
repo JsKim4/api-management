@@ -1,19 +1,19 @@
 package me.kjs.apimanagement.applications.presenstation
 
-import me.kjs.apimanagement.product.presentation.ProjectCode
+import me.kjs.apimanagement.product.presentation.ProductCode
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
 
 
 @RestController
-@RequestMapping("/{applicationId}/product/{productCode}")
+@RequestMapping("/applications/{applicationId}/products/{productCode}")
 class ApplicationProductRestController {
 
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
 	fun createApplicationProduct(
 		@PathVariable applicationId: String,
-		@PathVariable productCode: ProjectCode,
+		@PathVariable productCode: ProductCode,
 		@RequestBody request: ApplicationProductForm.Create.Request
 	): ApplicationProductForm.Create.Response {
 		TODO()
@@ -23,7 +23,7 @@ class ApplicationProductRestController {
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	fun deleteApplicationProduct(
 		@PathVariable applicationId: String,
-		@PathVariable productCode: ProjectCode,
+		@PathVariable productCode: ProductCode,
 	) {
 		TODO()
 	}

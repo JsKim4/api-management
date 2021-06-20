@@ -1,7 +1,6 @@
 package me.kjs.apimanagement
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.beans.factory.annotation.Autowired
@@ -13,8 +12,6 @@ import org.springframework.restdocs.RestDocumentationExtension
 import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration
 import org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint
 import org.springframework.test.web.servlet.MockMvc
-import org.springframework.test.web.servlet.RequestBuilder
-import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers
 import org.springframework.test.web.servlet.setup.DefaultMockMvcBuilder
 import org.springframework.test.web.servlet.setup.MockMvcBuilders

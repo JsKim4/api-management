@@ -1,5 +1,5 @@
 package me.kjs.apimanagement.product.presentation
 
-enum class ProjectCode {
+enum class ProductCode {
 	LOTTO
 }

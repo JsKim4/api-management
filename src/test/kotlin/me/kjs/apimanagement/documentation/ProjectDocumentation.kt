@@ -4,7 +4,7 @@ import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.whenever
 import me.kjs.apimanagement.DocumentationTestBase
 import me.kjs.apimanagement.content
-import me.kjs.apimanagement.product.presentation.ProjectCode
+import me.kjs.apimanagement.product.presentation.ProductCode
 import me.kjs.apimanagement.product.presentation.ProjectForm
 import me.kjs.apimanagement.product.presentation.ProjectRestController
 import org.junit.jupiter.api.DisplayName
@@ -20,7 +20,7 @@ import org.springframework.restdocs.request.RequestDocumentation.pathParameters
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 
 @DisplayName("프로젝트 관련 문서화")
-class ProjectDocumentation : DocumentationTestBase() {
+class   ProjectDocumentation : DocumentationTestBase() {
 
 	@MockBean
 	private lateinit var mockProjectRestController: ProjectRestController
@@ -31,12 +31,12 @@ class ProjectDocumentation : DocumentationTestBase() {
 		val title = "Project Title"
 		val content = "연습용 콘텐츠 입니다."
 		val request = ProjectForm.Put.Request(title, content)
-		whenever(mockProjectRestController.createProject(request, ProjectCode.LOTTO)).thenReturn(
+		whenever(mockProjectRestController.createProject(request, ProductCode.LOTTO)).thenReturn(
 			ResponseEntity.noContent().build()
 		)
 
 		mockMvc.perform(
-			RestDocumentationRequestBuilders.put("/projects/{projectCode}", ProjectCode.LOTTO)
+			RestDocumentationRequestBuilders.put("/projects/{projectCode}", ProductCode.LOTTO)
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(request)
 		)
@@ -61,12 +61,12 @@ class ProjectDocumentation : DocumentationTestBase() {
 		val content = "연습용 콘텐츠 입니다."
 		whenever(mockProjectRestController.queryProject(any())).thenReturn(
 			ProjectForm.Find.Response.One(
-				code = ProjectCode.LOTTO,
+				code = ProductCode.LOTTO,
 				title = title,
 				content = content
 			)
 		)
-		mockMvc.perform(RestDocumentationRequestBuilders.get("/projects/{projectCode}", ProjectCode.LOTTO))
+		mockMvc.perform(RestDocumentationRequestBuilders.get("/projects/{projectCode}", ProductCode.LOTTO))
 			.andExpect(status().isOk)
 			.andDo(
 				document(
@@ -92,7 +92,7 @@ class ProjectDocumentation : DocumentationTestBase() {
 			ProjectForm.Find.Response.All(
 				contents = listOf(
 					ProjectForm.Find.Response.One(
-						code = ProjectCode.LOTTO,
+						code = ProductCode.LOTTO,
 						title = title,
 						content = content
 					)

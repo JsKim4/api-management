@@ -8,7 +8,7 @@ class ProjectForm {
 		)
 
 		data class Response(
-			val code: ProjectCode,
+			val code: ProductCode,
 			val title: String,
 			val content: String
 		)
@@ -18,11 +18,11 @@ class ProjectForm {
 	class Find {
 		class Response {
 			data class All(
-				val contents: kotlin.collections.List<One>
+				val contents: List<One>
 			)
 
 			data class One(
-				val code: ProjectCode,
+				val code: ProductCode,
 				val title: String,
 				val content: String
 			)

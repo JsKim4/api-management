@@ -8,10 +8,10 @@ import org.springframework.web.bind.annotation.*
 @RequestMapping("/projects")
 class ProjectRestController {
 
-	@PutMapping("/{projectCode}")
+	@PutMapping("/{productCode}")
 	fun createProject(
 		@RequestBody request: ProjectForm.Put.Request,
-		@PathVariable projectCode: ProjectCode
+		@PathVariable productCode: ProductCode
 	): ResponseEntity<ProjectForm.Put.Response> {
 		TODO()
 	}
@@ -24,10 +24,10 @@ class ProjectRestController {
 		TODO()
 	}
 
-	@GetMapping("/{projectCode}")
+	@GetMapping("/{productCode}")
 	@ResponseStatus(HttpStatus.OK)
 	fun queryProject(
-		@PathVariable projectCode: ProjectCode
+		@PathVariable productCode: ProductCode
 	): ProjectForm.Find.Response.One {
 		TODO()
 	}
