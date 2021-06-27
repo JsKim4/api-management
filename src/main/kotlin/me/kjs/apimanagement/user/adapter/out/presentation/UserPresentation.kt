@@ -1,15 +1,10 @@
-package me.kjs.apimanagement.user.presentation
+package me.kjs.apimanagement.user.adapter.out.presentation
 
-import com.sun.istack.NotNull
-
-interface UserForm {
+interface UserPresentation {
 	interface Create {
 		data class Request(
-			@NotNull
 			val email: String,
-			@NotNull
 			val name: String,
-			@NotNull
 			val password: String,
 		)
 

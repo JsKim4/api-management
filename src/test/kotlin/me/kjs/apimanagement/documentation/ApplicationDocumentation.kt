@@ -6,10 +6,11 @@ import me.kjs.apimanagement.applications.presenstation.ApplicationForm
 import me.kjs.apimanagement.applications.presenstation.ApplicationRestController
 import me.kjs.apimanagement.common.Response
 import me.kjs.apimanagement.common.ResponseType
-import me.kjs.apimanagement.common.generateId
+import me.kjs.apimanagement.common.port.out.IdGeneratePort
 import me.kjs.apimanagement.content
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.http.MediaType
 import org.springframework.restdocs.headers.HeaderDocumentation.headerWithName
@@ -25,6 +26,9 @@ class ApplicationDocumentation : DocumentationTestBase() {
 
 	@MockBean
 	lateinit var applicationRestController: ApplicationRestController
+
+	@Autowired
+	lateinit var idGeneratePort: IdGeneratePort
 
 	@Test
 	@DisplayName("어플리케이션 생성 문서화")
@@ -78,7 +82,7 @@ class ApplicationDocumentation : DocumentationTestBase() {
 		val list = mutableListOf<ApplicationForm.Find.Response.Simple>()
 
 		for (i in 1..contentCount) {
-			list.add(ApplicationForm.Find.Response.Simple(generateId(), "Title $i"))
+			list.add(ApplicationForm.Find.Response.Simple(idGeneratePort.generateId(), "Title $i"))
 		}
 
 		val slice: Response.Slice<ApplicationForm.Find.Response.Simple> = Response.Slice(
@@ -98,30 +102,30 @@ class ApplicationDocumentation : DocumentationTestBase() {
 		)
 			.andExpect(status().isOk)
 			.andDo(
-			document(
-				"query-applications",
-				requestHeaders(
-					headerWithName("ResponseType").description("SLICE")
-				),
-				requestParameters(
-					parameterWithName("page").description("페이지 정보 1 부터 시작"),
-					parameterWithName("contentCount").description("페이지당 콘텐츠 개수 1 ~ 100")
-				),
-				responseFields(
-					fieldWithPath("nowPage").description("페이지 정보 1 부터 시작"),
-					fieldWithPath("hasNext").description("다음 페이지 존재 여부"),
-					fieldWithPath("contents").description("콘텐츠 리스트"),
-					fieldWithPath("contents[].id").description("콘텐츠 리스트"),
-					fieldWithPath("contents[].title").description("콘텐츠 제목")
+				document(
+					"query-applications",
+					requestHeaders(
+						headerWithName("ResponseType").description("SLICE")
+					),
+					requestParameters(
+						parameterWithName("page").description("페이지 정보 1 부터 시작"),
+						parameterWithName("contentCount").description("페이지당 콘텐츠 개수 1 ~ 100")
+					),
+					responseFields(
+						fieldWithPath("nowPage").description("페이지 정보 1 부터 시작"),
+						fieldWithPath("hasNext").description("다음 페이지 존재 여부"),
+						fieldWithPath("contents").description("콘텐츠 리스트"),
+						fieldWithPath("contents[].id").description("콘텐츠 리스트"),
+						fieldWithPath("contents[].title").description("콘텐츠 제목")
+					)
 				)
 			)
-		)
 	}
 
 	@Test
 	@DisplayName("어플리케이션 단건 조회 문서화")
 	fun getApplicationDocumentation() {
-		val id = generateId()
+		val id = idGeneratePort.generateId()
 		val title = "application title"
 		val content = "application content"
 		val clientId = "application-client-id"
@@ -143,26 +147,26 @@ class ApplicationDocumentation : DocumentationTestBase() {
 		)
 			.andExpect(status().isOk)
 			.andDo(
-			document(
-				"query-application",
-				pathParameters(
-					parameterWithName("applicationId").description("에플리케이션 id")
-				),
-				responseFields(
-					fieldWithPath("id").description("application 고유번호"),
-					fieldWithPath("title").description("application 이름"),
-					fieldWithPath("content").description("application 내용"),
-					fieldWithPath("clientId").description("application client id"),
-					fieldWithPath("secretKey").description("application secret key"),
+				document(
+					"query-application",
+					pathParameters(
+						parameterWithName("applicationId").description("에플리케이션 id")
+					),
+					responseFields(
+						fieldWithPath("id").description("application 고유번호"),
+						fieldWithPath("title").description("application 이름"),
+						fieldWithPath("content").description("application 내용"),
+						fieldWithPath("clientId").description("application client id"),
+						fieldWithPath("secretKey").description("application secret key"),
+					)
 				)
 			)
-		)
 	}
 
 	@Test
 	@DisplayName("어플리케이션 삭제 문서화")
 	fun deleteApplicationDocumentation() {
-		val id = generateId()
+		val id = idGeneratePort.generateId()
 		mockMvc.perform(
 			RestDocumentationRequestBuilders.delete("/applications/{applicationId}", id)
 		)
@@ -180,7 +184,7 @@ class ApplicationDocumentation : DocumentationTestBase() {
 	@Test
 	@DisplayName("어플리케이션 시크릿키 변경 문서화")
 	fun updateSecretKeyApplicationDocumentation() {
-		val id = generateId()
+		val id = idGeneratePort.generateId()
 		mockMvc.perform(
 			RestDocumentationRequestBuilders.patch("/applications/{applicationId}/secret-key", id)
 		)

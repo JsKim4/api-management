@@ -1,6 +1,5 @@
 package me.kjs.apimanagement.common
 
-import java.util.*
 
 
 val EMAIL_REG_EX: Regex = Regex(
@@ -8,7 +7,3 @@ val EMAIL_REG_EX: Regex = Regex(
 )
 const val NAME_MIN_LENGTH = 2
 const val NAME_MAX_LENGTH = 20
-
-fun generateId(): String {
-	return UUID.randomUUID().toString()
-}

@@ -1,20 +1,20 @@
 package me.kjs.apimanagement.user.domain
 
-import me.kjs.apimanagement.common.PasswordEncoder
-import me.kjs.apimanagement.common.generateId
+import me.kjs.apimanagement.user.application.port.out.PasswordEncoder
+import me.kjs.apimanagement.user.domain.vo.Token
 import me.kjs.apimanagement.user.domain.vo.UserEmail
 import me.kjs.apimanagement.user.domain.vo.UserName
-import java.time.LocalDateTime
 
 class User(
+	val id: String,
 	name: String,
 	email: String,
 	password: String,
+	passwordEncoder: PasswordEncoder
 ) {
-	val id: String = generateId()
 	private var userName: UserName = UserName(name)
 	private var userEmail: UserEmail = UserEmail(email)
-	private var password: String = password
+	private var password: String = passwordEncoder.encrypt(password)
 	private var authList: List<UserAuth> = ArrayList()
 
 	val name: String
@@ -26,7 +26,7 @@ class User(
 		return passwordEncoder.match(this.password, password)
 	}
 
-	fun putAuthToken(clientId: String, refreshToken: String, expiredDateTime: LocalDateTime) {
+	fun putAuthToken(clientId: String, refreshToken: Token) {
 		val first = authList.firstOrNull {
 			it.equalsClientId(clientId)
 		}
@@ -35,12 +35,11 @@ class User(
 				UserAuth(
 					user = this,
 					clientId = clientId,
-					refreshToken = refreshToken,
-					expiredDateTime = expiredDateTime
+					token = refreshToken,
 				)
 			)
 		} else {
-			first.update(refreshToken, expiredDateTime)
+			first.update(refreshToken)
 		}
 	}
 
@@ -50,5 +49,17 @@ class User(
 		}
 		userAuth ?: return false
 		return userAuth.validRefreshToken(refreshToken)
+	}
+
+	fun updateName(name: String) {
+		userName = UserName(name)
+	}
+
+	fun updatePassword(password: String, passwordEncoder: PasswordEncoder) {
+		this.password = passwordEncoder.encrypt(password)
+	}
+
+	fun findAuthTokenByClientId(clientId: String): Token? {
+		return authList.find { it.equalsClientId(clientId) }?.token
 	}
 }

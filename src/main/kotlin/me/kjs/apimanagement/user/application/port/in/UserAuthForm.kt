@@ -1,15 +1,12 @@
-package me.kjs.apimanagement.user.presentation
-
-import javax.validation.constraints.NotEmpty
+package me.kjs.apimanagement.user.application.port.`in`
 
 interface UserAuthForm {
 	interface Create {
 		data class Request(
-			@NotEmpty
 			val email: String,
-			val password: String
+			val password: String,
+			val clientId: String,
 		)
-
 	}
 
 	interface Token {
@@ -23,8 +20,9 @@ interface UserAuthForm {
 
 	interface Refresh {
 		class Request(
+			val userId: String,
+			val clientId: String,
 			val refreshToken: String
 		)
 	}
-
 }

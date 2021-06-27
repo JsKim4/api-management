@@ -4,11 +4,12 @@ import com.nhaarman.mockitokotlin2.whenever
 import me.kjs.apimanagement.DocumentationTestBase
 import me.kjs.apimanagement.applications.presenstation.ApplicationProductForm
 import me.kjs.apimanagement.applications.presenstation.ApplicationProductRestController
-import me.kjs.apimanagement.common.generateId
+import me.kjs.apimanagement.common.port.out.IdGeneratePort
 import me.kjs.apimanagement.content
 import me.kjs.apimanagement.product.presentation.ProductCode
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.http.MediaType
 import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document
@@ -25,10 +26,13 @@ class ApplicationProductDocumentation : DocumentationTestBase() {
 	@MockBean
 	lateinit var applicationProductRestController: ApplicationProductRestController
 
+	@Autowired
+	lateinit var idGeneratePort: IdGeneratePort
+
 	@Test
 	@DisplayName("어플리케이션 프로젝트 사용 신청")
 	fun createApplicationProductDocumentation() {
-		val applicationId = generateId()
+		val applicationId = idGeneratePort.generateId()
 		val productCode: ProductCode = ProductCode.LOTTO
 		val request = ApplicationProductForm.Create.Request(
 			"cause"
@@ -43,7 +47,11 @@ class ApplicationProductDocumentation : DocumentationTestBase() {
 		)
 
 		mockMvc.perform(
-			RestDocumentationRequestBuilders.post("/applications/{applicationId}/products/{productCode}")
+			RestDocumentationRequestBuilders.post(
+				"/applications/{applicationId}/products/{productCode}",
+				applicationId,
+				productCode
+			)
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(request)
 		)
@@ -66,7 +74,7 @@ class ApplicationProductDocumentation : DocumentationTestBase() {
 	@Test
 	@DisplayName("어플리케이션 프로젝트 사용 중지")
 	fun deleteApplicationProductDocumentation() {
-		val applicationId = generateId()
+		val applicationId = idGeneratePort.generateId()
 		val productCode = ProductCode.LOTTO
 		mockMvc.perform(
 			RestDocumentationRequestBuilders.delete(

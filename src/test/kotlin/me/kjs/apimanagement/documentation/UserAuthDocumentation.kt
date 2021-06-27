@@ -3,12 +3,14 @@ package me.kjs.apimanagement.documentation
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.whenever
 import me.kjs.apimanagement.DocumentationTestBase
-import me.kjs.apimanagement.common.generateId
+import me.kjs.apimanagement.common.port.out.IdGeneratePort
 import me.kjs.apimanagement.content
-import me.kjs.apimanagement.user.presentation.UserAuthForm
-import me.kjs.apimanagement.user.presentation.UserAuthRestController
+import me.kjs.apimanagement.user.adapter.out.presentation.UserAuthCreateRestController
+import me.kjs.apimanagement.user.adapter.out.presentation.UserAuthPresentation
+import me.kjs.apimanagement.user.adapter.out.presentation.UserAuthRestController
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.http.MediaType
 import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document
@@ -26,26 +28,32 @@ class UserAuthDocumentation : DocumentationTestBase() {
 	@MockBean
 	lateinit var userAuthRestController: UserAuthRestController
 
+	@MockBean
+	lateinit var userAuthCreateRestController: UserAuthCreateRestController
+
+	@Autowired
+	lateinit var idGeneratePort: IdGeneratePort
+
 	@Test
 	@DisplayName("유저 인증 토큰 발급 문서화")
 	fun userAuthCreateDocumentation() {
-		val id = generateId()
-
-		val request = UserAuthForm.Create.Request(
+		val clientId = UUID.randomUUID().toString()
+		val request = UserAuthPresentation.Create.Request(
 			"testEmail@email.com",
-			"a123456@!"
+			"a123456@!",
+			clientId = clientId
 		)
 
-		val response = UserAuthForm.Token.Response(
+		val response = UserAuthPresentation.Token.Response(
 			accessToken = UUID.randomUUID().toString(),
 			accessTokenExpiredSecond = 12348603,
 			refreshToken = UUID.randomUUID().toString(),
 			refreshTokenExpiredSecond = 12348603
 		)
 
-		whenever(userAuthRestController.createUserAuthInfo(any(), any())).thenReturn(response)
+		whenever(userAuthCreateRestController.createUserAuthInfo(any())).thenReturn(response)
 		mockMvc.perform(
-			RestDocumentationRequestBuilders.post("/users/{userId}/auth", id)
+			RestDocumentationRequestBuilders.post("/users/auth")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(request)
 		)
@@ -57,12 +65,10 @@ class UserAuthDocumentation : DocumentationTestBase() {
 			.andDo(
 				document(
 					"create-user-auth",
-					pathParameters(
-						parameterWithName("userId").description("유저 아이디")
-					),
 					requestFields(
 						fieldWithPath("email").description("유저 이메일"),
 						fieldWithPath("password").description("비밀번호"),
+						fieldWithPath("clientId").description("클라이언트 ID")
 					),
 					responseFields(
 						fieldWithPath("accessToken").description("엑세스 토큰"),
@@ -79,24 +85,26 @@ class UserAuthDocumentation : DocumentationTestBase() {
 	fun refreshAccessTokenDocumentation() {
 
 		val refreshToken = UUID.randomUUID().toString()
-		val request = UserAuthForm.Refresh.Request(
-			refreshToken = refreshToken
+		val clientId = UUID.randomUUID().toString()
+		val request = UserAuthPresentation.Refresh.Request(
+			refreshToken = refreshToken,
+			clientId = clientId
 		)
 
-		val response = UserAuthForm.Token.Response(
+		val response = UserAuthPresentation.Token.Response(
 			accessToken = UUID.randomUUID().toString(),
 			accessTokenExpiredSecond = 12348603,
 			refreshToken = refreshToken,
 			refreshTokenExpiredSecond = 12348603
 		)
 
-		val id = generateId()
+		val id = idGeneratePort.generateId()
 
 		whenever(userAuthRestController.refreshAccessToken(any(), any())).thenReturn(response)
 
 		mockMvc.perform(
 			RestDocumentationRequestBuilders.post("/users/{userId}/auth/refresh", id)
-				.contentType(MediaType.APPLICATION_JSON) 
+				.contentType(MediaType.APPLICATION_JSON)
 				.content(request)
 		)
 			.andExpect(jsonPath("refreshToken").value(request.refreshToken))
@@ -107,7 +115,8 @@ class UserAuthDocumentation : DocumentationTestBase() {
 						parameterWithName("userId").description("유저 아이디")
 					),
 					requestFields(
-						fieldWithPath("refreshToken").description("리프레시 토큰")
+						fieldWithPath("refreshToken").description("리프레시 토큰"),
+						fieldWithPath("clientId").description("클라이언트 ID")
 					),
 					responseFields(
 						fieldWithPath("accessToken").description("엑세스 토큰"),

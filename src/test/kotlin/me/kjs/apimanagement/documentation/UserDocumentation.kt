@@ -4,12 +4,13 @@ import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.doNothing
 import com.nhaarman.mockitokotlin2.whenever
 import me.kjs.apimanagement.DocumentationTestBase
-import me.kjs.apimanagement.common.generateId
+import me.kjs.apimanagement.common.port.out.IdGeneratePort
 import me.kjs.apimanagement.content
-import me.kjs.apimanagement.user.presentation.UserForm
-import me.kjs.apimanagement.user.presentation.UserRestController
+import me.kjs.apimanagement.user.adapter.out.presentation.UserPresentation
+import me.kjs.apimanagement.user.adapter.out.presentation.UserRestController
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.http.MediaType
 import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document
@@ -26,16 +27,18 @@ class UserDocumentation : DocumentationTestBase() {
 	@MockBean
 	lateinit var userRestController: UserRestController
 
+	@Autowired
+	lateinit var idGeneratePort: IdGeneratePort
 
 	@Test
 	@DisplayName("유저 생성 문서화")
 	fun createUserDocumentation() {
-		val request = UserForm.Create.Request(
+		val request = UserPresentation.Create.Request(
 			email = "testemail@mail.com",
 			name = "테스터",
 			password = "password123@",
 		)
-		val response = UserForm.Create.Response(
+		val response = UserPresentation.Create.Response(
 			email = "testemail@mail.com",
 			name = "테스터",
 		)
@@ -69,12 +72,12 @@ class UserDocumentation : DocumentationTestBase() {
 	@Test
 	@DisplayName("유저 조회 문서화")
 	fun getUserDocumentation() {
-		val response = UserForm.Find.Response.One(
+		val response = UserPresentation.Find.Response.One(
 			email = "testemail@mail.com",
 			name = "테스터",
 		)
 		whenever(userRestController.getUser(any())).thenReturn(response)
-		val id = generateId()
+		val id = idGeneratePort.generateId()
 		mockMvc.perform(RestDocumentationRequestBuilders.get("/users/{userId}", id))
 			.andExpect(status().isOk)
 			.andDo(
@@ -94,11 +97,11 @@ class UserDocumentation : DocumentationTestBase() {
 	@Test
 	@DisplayName("유저 업데이트 문서화")
 	fun updateUserPartDocumentation() {
-		val request = UserForm.UpdatePart.Request(
-			UserForm.UpdatePart.Request.UpdateCommand.NAME,
+		val request = UserPresentation.UpdatePart.Request(
+			UserPresentation.UpdatePart.Request.UpdateCommand.NAME,
 			"value"
 		)
-		val id = generateId()
+		val id = idGeneratePort.generateId()
 		doNothing().whenever(userRestController).updateUserPart(any(), any())
 		mockMvc.perform(
 			RestDocumentationRequestBuilders
@@ -126,7 +129,7 @@ class UserDocumentation : DocumentationTestBase() {
 	@DisplayName("유저 삭제 문서화")
 	fun deleteUserDocumentation() {
 		doNothing().whenever(userRestController).withdrawUser(any())
-		val id = generateId()
+		val id = idGeneratePort.generateId()
 		mockMvc.perform(RestDocumentationRequestBuilders.delete("/users/{userId}", id))
 			.andExpect(status().isNoContent)
 			.andDo(
