@@ -4,9 +4,9 @@ import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.whenever
 import me.kjs.apimanagement.DocumentationTestBase
 import me.kjs.apimanagement.content
-import me.kjs.apimanagement.product.presentation.ProductCode
-import me.kjs.apimanagement.product.presentation.ProjectForm
-import me.kjs.apimanagement.product.presentation.ProjectRestController
+import me.kjs.apimanagement.product.adapter.out.presentation.ProductCode
+import me.kjs.apimanagement.product.adapter.out.presentation.ProductPresentation
+import me.kjs.apimanagement.product.adapter.out.presentation.ProductRestController
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.mock.mockito.MockBean
@@ -23,15 +23,15 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 class   ProjectDocumentation : DocumentationTestBase() {
 
 	@MockBean
-	private lateinit var mockProjectRestController: ProjectRestController
+	private lateinit var mockProductRestController: ProductRestController
 
 	@Test
 	@DisplayName("프로젝트 생성 문서화")
 	fun projectCreateDocumentation() {
 		val title = "Project Title"
 		val content = "연습용 콘텐츠 입니다."
-		val request = ProjectForm.Put.Request(title, content)
-		whenever(mockProjectRestController.createProject(request, ProductCode.LOTTO)).thenReturn(
+		val request = ProductPresentation.Put.Request(title, content)
+		whenever(mockProductRestController.createProject(request, ProductCode.LOTTO)).thenReturn(
 			ResponseEntity.noContent().build()
 		)
 
@@ -59,8 +59,8 @@ class   ProjectDocumentation : DocumentationTestBase() {
 	fun projectQueryDocumentation() {
 		val title = "Project Title"
 		val content = "연습용 콘텐츠 입니다."
-		whenever(mockProjectRestController.queryProject(any())).thenReturn(
-			ProjectForm.Find.Response.One(
+		whenever(mockProductRestController.queryProduct(any())).thenReturn(
+			ProductPresentation.Find.Response.Simple(
 				code = ProductCode.LOTTO,
 				title = title,
 				content = content
@@ -88,10 +88,10 @@ class   ProjectDocumentation : DocumentationTestBase() {
 	fun projectsQueryDocumentation() {
 		val title = "Project Title"
 		val content = "연습용 콘텐츠 입니다."
-		whenever(mockProjectRestController.queryProjects()).thenReturn(
-			ProjectForm.Find.Response.All(
+		whenever(mockProductRestController.queryProducts()).thenReturn(
+			ProductPresentation.Find.Response.All(
 				contents = listOf(
-					ProjectForm.Find.Response.One(
+					ProductPresentation.Find.Response.Simple(
 						code = ProductCode.LOTTO,
 						title = title,
 						content = content

@@ -9,6 +9,7 @@ interface UserForm {
 		)
 
 		data class Response(
+			val userId: String,
 			val email: String,
 			val name: String,
 		)
@@ -17,6 +18,7 @@ interface UserForm {
 	interface Find {
 		interface Response {
 			data class One(
+				val userId: String,
 				val email: String,
 				val name: String,
 			)

@@ -19,30 +19,22 @@ class UserRestController(
 	fun createUser(
 		@RequestBody request: UserPresentation.Create.Request,
 	): UserPresentation.Create.Response {
-		val createdUser = createUserUseCase.createUser(
-			UserForm.Create.Request(
-				request.email,
-				request.name,
-				request.password
-			)
-		)
-		return UserPresentation.Create.Response(
-			createdUser.email,
-			createdUser.name
-		)
+		return createUserUseCase.createUser(request.toForm()).toPresentation()
 	}
+
+	fun UserPresentation.Create.Request.toForm() = UserForm.Create.Request(email, name, password)
+	fun UserForm.Create.Response.toPresentation() = UserPresentation.Create.Response(email, name)
+
 
 	@GetMapping("/{userId}")
 	@ResponseStatus(HttpStatus.OK)
 	fun getUser(
 		@PathVariable userId: String,
 	): UserPresentation.Find.Response.One {
-		val getUser = getUserUseCase.getUser(userId)
-		return UserPresentation.Find.Response.One(
-			getUser.email,
-			getUser.name
-		)
+		return getUserUseCase.getUser(userId).toPresentation()
 	}
+
+	fun UserForm.Find.Response.One.toPresentation() = UserPresentation.Find.Response.One(email, name)
 
 	@PatchMapping("/{userId}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
@@ -52,19 +44,19 @@ class UserRestController(
 	) {
 		when (request.updateCommand) {
 			UserPresentation.UpdatePart.Request.UpdateCommand.NAME -> updatePasswordUseCase.updatePassword(
-				UserForm.Update.Request.Password(
-					userId,
-					request.value
-				)
+				request.toPasswordFormWith(userId)
 			)
 			UserPresentation.UpdatePart.Request.UpdateCommand.PASSWORD -> updateNameUseCase.updateName(
-				UserForm.Update.Request.Name(
-					userId,
-					request.value
-				)
+				request.toNameFormWith(userId)
 			)
 		}
 	}
+
+	fun UserPresentation.UpdatePart.Request.toPasswordFormWith(userId: String) =
+		UserForm.Update.Request.Password(userId, value)
+
+	fun UserPresentation.UpdatePart.Request.toNameFormWith(userId: String) =
+		UserForm.Update.Request.Name(userId, value)
 
 	@DeleteMapping("/{userId}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)

@@ -2,11 +2,11 @@ package me.kjs.apimanagement.documentation
 
 import com.nhaarman.mockitokotlin2.whenever
 import me.kjs.apimanagement.DocumentationTestBase
-import me.kjs.apimanagement.applications.presenstation.ApplicationProductForm
-import me.kjs.apimanagement.applications.presenstation.ApplicationProductRestController
+import me.kjs.apimanagement.applications.adapter.out.presenstation.ApplicationProductPresentation
+import me.kjs.apimanagement.applications.adapter.out.presenstation.ApplicationProductRestController
 import me.kjs.apimanagement.common.port.out.IdGeneratePort
 import me.kjs.apimanagement.content
-import me.kjs.apimanagement.product.presentation.ProductCode
+import me.kjs.apimanagement.product.adapter.out.presentation.ProductCode
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -34,13 +34,13 @@ class ApplicationProductDocumentation : DocumentationTestBase() {
 	fun createApplicationProductDocumentation() {
 		val applicationId = idGeneratePort.generateId()
 		val productCode: ProductCode = ProductCode.LOTTO
-		val request = ApplicationProductForm.Create.Request(
+		val request = ApplicationProductPresentation.Create.Request(
 			"cause"
 		)
-		val response = ApplicationProductForm.Create.Response(
+		val response = ApplicationProductPresentation.Create.Response(
 			applicationId,
 			productCode,
-			ApplicationProductForm.ProcessStatus.REQUESTED
+			ApplicationProductPresentation.ProcessStatus.REQUESTED
 		)
 		whenever(applicationProductRestController.createApplicationProduct(applicationId, productCode, request)).thenReturn(
 			response

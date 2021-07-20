@@ -10,8 +10,9 @@ class GetUserService(
 	private val findUserPort: FindUserPort
 ) : GetUserUseCase {
 	override fun getUser(userId: String): UserForm.Find.Response.One {
-		val user = findUserPort.findUser(userId) ?: TODO()
+		val user = findUserPort.findUser(userId) ?: throw Exception()
 		return UserForm.Find.Response.One(
+			user.id,
 			user.email,
 			user.name
 		)

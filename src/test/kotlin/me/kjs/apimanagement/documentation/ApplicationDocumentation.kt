@@ -2,8 +2,8 @@ package me.kjs.apimanagement.documentation
 
 import com.nhaarman.mockitokotlin2.whenever
 import me.kjs.apimanagement.DocumentationTestBase
-import me.kjs.apimanagement.applications.presenstation.ApplicationForm
-import me.kjs.apimanagement.applications.presenstation.ApplicationRestController
+import me.kjs.apimanagement.applications.adapter.out.presenstation.ApplicationPresentation
+import me.kjs.apimanagement.applications.adapter.out.presenstation.ApplicationRestController
 import me.kjs.apimanagement.common.Response
 import me.kjs.apimanagement.common.ResponseType
 import me.kjs.apimanagement.common.port.out.IdGeneratePort
@@ -37,11 +37,11 @@ class ApplicationDocumentation : DocumentationTestBase() {
 		val content = "application content"
 		val clientId = "application-client-id"
 		val secretKey = "application-secret-key"
-		val request = ApplicationForm.Create.Request(
+		val request = ApplicationPresentation.Create.Request(
 			title = title,
 			content = content
 		)
-		val response = ApplicationForm.Create.Response(
+		val response = ApplicationPresentation.Create.Response(
 			title = title,
 			content = content,
 			clientId = clientId,
@@ -79,13 +79,13 @@ class ApplicationDocumentation : DocumentationTestBase() {
 
 		val page = 5
 		val contentCount = 100
-		val list = mutableListOf<ApplicationForm.Find.Response.Simple>()
+		val list = mutableListOf<ApplicationPresentation.Find.Response.Simple>()
 
 		for (i in 1..contentCount) {
-			list.add(ApplicationForm.Find.Response.Simple(idGeneratePort.generateId(), "Title $i"))
+			list.add(ApplicationPresentation.Find.Response.Simple(idGeneratePort.generateId(), "Title $i"))
 		}
 
-		val slice: Response.Slice<ApplicationForm.Find.Response.Simple> = Response.Slice(
+		val slice: Response.Slice<ApplicationPresentation.Find.Response.Simple> = Response.Slice(
 			page,
 			list,
 			true
@@ -131,7 +131,7 @@ class ApplicationDocumentation : DocumentationTestBase() {
 		val clientId = "application-client-id"
 		val secretKey = "application-secret-key"
 
-		val response = ApplicationForm.Find.Response.One(
+		val response = ApplicationPresentation.Find.Response.One(
 			id = id,
 			title = title,
 			content = content,

@@ -10,10 +10,10 @@ import org.springframework.stereotype.Service
 class DeleteUserService(
 	private val deleteUserPort: DeleteUserPort,
 	private val findUserPort: FindUserPort,
-): WithdrawUserUseCase {
+) : WithdrawUserUseCase {
 
 	override fun withdrawUser(userId: String) {
-		val findUser = findUserPort.findUser(userId) ?: TODO()
+		val findUser = findUserPort.findUser(userId) ?: throw Exception()
 		deleteUserPort.deleteUser(findUser)
 	}
 }

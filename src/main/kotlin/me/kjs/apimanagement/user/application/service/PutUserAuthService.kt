@@ -1,6 +1,7 @@
 package me.kjs.apimanagement.user.application.service
 
 import me.kjs.apimanagement.user.application.port.`in`.CreateTokenUseCase
+import me.kjs.apimanagement.user.application.port.`in`.DeleteTokenUseCase
 import me.kjs.apimanagement.user.application.port.`in`.RefreshTokenUseCase
 import me.kjs.apimanagement.user.application.port.`in`.UserAuthForm
 import me.kjs.apimanagement.user.application.port.out.FindUserPort
@@ -13,7 +14,7 @@ class PutUserAuthService(
 	private val findUserPort: FindUserPort,
 	private val passwordEncoder: PasswordEncoder,
 	private val tokenCreatePort: TokenCreatePort
-) : CreateTokenUseCase, RefreshTokenUseCase {
+) : CreateTokenUseCase, DeleteTokenUseCase, RefreshTokenUseCase {
 
 	override fun createToken(createRequest: UserAuthForm.Create.Request): UserAuthForm.Token.Response {
 		val email = createRequest.email
@@ -50,5 +51,10 @@ class PutUserAuthService(
 			accessToken.expiredSeconds,
 			refreshToken.expiredSeconds,
 		)
+	}
+
+	override fun deleteToken(userId: String, clientId: String) {
+		val user = findUserPort.findUser(userId) ?: TODO()
+		user.deleteAuthToken(clientId)
 	}
 }

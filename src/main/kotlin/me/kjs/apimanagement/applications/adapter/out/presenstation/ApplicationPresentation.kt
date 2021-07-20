@@ -1,7 +1,9 @@
-package me.kjs.apimanagement.applications.presenstation
+package me.kjs.apimanagement.applications.adapter.out.presenstation
 
-class ApplicationForm {
-	class Create {
+import me.kjs.apimanagement.applications.application.port.`in`.ApplicationForm
+
+interface ApplicationPresentation {
+	interface Create {
 		data class Response(
 			val title: String,
 			val content: String,
@@ -12,12 +14,14 @@ class ApplicationForm {
 		data class Request(
 			val title: String,
 			val content: String
-		)
+		) {
+			fun toForm() = ApplicationForm.Create.Request(title, content)
+		}
 
 	}
 
-	class Find {
-		class Response {
+	interface Find {
+		interface Response {
 			data class One(
 				val id: String,
 				val title: String,
