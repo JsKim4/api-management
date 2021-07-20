@@ -33,7 +33,6 @@ class ApplicationProductRestController(
 
 	fun me.kjs.apimanagement.applications.domain.ProcessStatus.toPresentation() = when (this) {
 		me.kjs.apimanagement.applications.domain.ProcessStatus.ACCEPTED -> ApplicationProductPresentation.ProcessStatus.ACCEPTED
-		me.kjs.apimanagement.applications.domain.ProcessStatus.PROCESSING -> ApplicationProductPresentation.ProcessStatus.PROCESSING
 		me.kjs.apimanagement.applications.domain.ProcessStatus.REJECTED -> ApplicationProductPresentation.ProcessStatus.REJECTED
 		me.kjs.apimanagement.applications.domain.ProcessStatus.REQUESTED -> ApplicationProductPresentation.ProcessStatus.REQUESTED
 	}

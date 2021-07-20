@@ -31,7 +31,7 @@ class   ProjectDocumentation : DocumentationTestBase() {
 		val title = "Project Title"
 		val content = "연습용 콘텐츠 입니다."
 		val request = ProductPresentation.Put.Request(title, content)
-		whenever(mockProductRestController.createProject(request, ProductCode.LOTTO)).thenReturn(
+		whenever(mockProductRestController.updateProject(request, ProductCode.LOTTO)).thenReturn(
 			ResponseEntity.noContent().build()
 		)
 

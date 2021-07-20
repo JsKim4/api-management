@@ -18,7 +18,7 @@ class ProductRestController(
 
 
 	@PutMapping("/{productCode}")
-	fun createProject(
+	fun updateProject(
 		@RequestBody request: ProductPresentation.Put.Request,
 		@PathVariable productCode: ProductCode
 	): ResponseEntity<Unit> {

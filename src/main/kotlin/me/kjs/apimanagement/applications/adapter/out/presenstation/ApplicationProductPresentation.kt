@@ -23,7 +23,7 @@ interface ApplicationProductPresentation {
 	}
 
 	enum class ProcessStatus {
-		REQUESTED, PROCESSING, ACCEPTED, REJECTED
+		REQUESTED, ACCEPTED, REJECTED
 	}
 
 }
