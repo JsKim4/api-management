@@ -15,6 +15,7 @@ interface ApplicationProductForm {
 			val applicationId: String,
 			val productCode: ProductCode,
 			val processStatus: ProcessStatus,
+			val cause: String
 		)
 	}
 }

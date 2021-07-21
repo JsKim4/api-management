@@ -5,6 +5,7 @@ import me.kjs.apimanagement.applications.application.port.`in`.UnUseProductAtApp
 import me.kjs.apimanagement.applications.application.port.`in`.UseProductAtApplicationUseCase
 import me.kjs.apimanagement.product.adapter.out.presentation.ProductCode
 import org.springframework.http.HttpStatus
+import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
 
@@ -15,15 +16,16 @@ class ApplicationProductRestController(
 	private val unUseProductAtApplicationUseCase: UnUseProductAtApplicationUseCase,
 ) {
 
-	@PostMapping
-	@ResponseStatus(HttpStatus.CREATED)
+	@PutMapping
 	fun createApplicationProduct(
 		@PathVariable applicationId: String,
 		@PathVariable productCode: ProductCode,
 		@RequestBody request: ApplicationProductPresentation.Create.Request
-	): ApplicationProductPresentation.Create.Response {
+	): ResponseEntity<ApplicationProductPresentation.Create.Response?> {
 		val result = useProductAtApplicationUseCase.useProductAtApplication(request.toFormWith(applicationId, productCode))
-		return result.toPresentation()
+		return result?.let {
+			ResponseEntity.status(HttpStatus.CREATED).body(it.toPresentation())
+		} ?: ResponseEntity.noContent().build()
 	}
 
 	private fun ApplicationProductForm.Create.Response.toPresentation() =
@@ -48,7 +50,7 @@ class ApplicationProductRestController(
 		@PathVariable applicationId: String,
 		@PathVariable productCode: ProductCode,
 	) {
-		unUseProductAtApplicationUseCase.unUseProductAtApplication(productCode, applicationId)
+		unUseProductAtApplicationUseCase.unUseProductAtApplication(productCode.toDomainCode(), applicationId)
 	}
 
 
