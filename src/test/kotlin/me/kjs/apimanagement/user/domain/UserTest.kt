@@ -2,10 +2,10 @@ package me.kjs.apimanagement.user.domain
 
 import me.kjs.apimanagement.common.port.out.IdGeneratePort
 import me.kjs.apimanagement.user.application.port.out.PasswordEncoder
+import me.kjs.apimanagement.user.domain.core.User
 import me.kjs.apimanagement.user.domain.vo.Token
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.DisplayName
-import org.junit.jupiter.api.RepeatedTest
 import org.junit.jupiter.api.Test
 import java.time.LocalDateTime
 import java.util.*

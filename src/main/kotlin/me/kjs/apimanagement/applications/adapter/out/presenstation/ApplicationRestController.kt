@@ -9,7 +9,7 @@ import javax.validation.constraints.Max
 import javax.validation.constraints.Min
 
 @RestController
-@RequestMapping("/applications")
+@RequestMapping("/users/{userId}/applications")
 class ApplicationRestController(
 	private val createApplicationUseCase: CreateApplicationUseCase,
 	private val getOneApplicationUseCase: GetOneApplicationUseCase,
@@ -21,9 +21,10 @@ class ApplicationRestController(
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
 	fun createApplication(
-		@RequestBody request: ApplicationPresentation.Create.Request
+		@RequestBody request: ApplicationPresentation.Create.Request,
+		@PathVariable userId: String
 	): ApplicationPresentation.Create.Response {
-		return createApplicationUseCase.createApplication(request.toForm()).toPresentation()
+		return createApplicationUseCase.createApplication(request.toFormWith(userId)).toPresentation()
 	}
 
 	fun ApplicationForm.Create.Response.toPresentation() =
@@ -36,6 +37,7 @@ class ApplicationRestController(
 		@RequestHeader(value = "ResponseType", defaultValue = "SLICE", required = false) responseType: ResponseType,
 		@RequestParam(value = "page", defaultValue = "0", required = true) @Min(1) page: Int,
 		@RequestParam(value = "contentCount", defaultValue = "30", required = false) @Max(100) @Min(1) contentCount: Int,
+		@PathVariable userId: String,
 	): ResponseResult<ApplicationPresentation.Find.Response.Simple> {
 		return when (responseType) {
 			ResponseType.SLICE -> findOnPageApplicationUseCase.findSlice(page, contentCount)
@@ -49,7 +51,8 @@ class ApplicationRestController(
 	@GetMapping("/{applicationId}")
 	@ResponseStatus(HttpStatus.OK)
 	fun getApplication(
-		@PathVariable applicationId: String
+		@PathVariable applicationId: String,
+		@PathVariable userId: String
 	): ApplicationPresentation.Find.Response.One {
 		return getOneApplicationUseCase.getOne(applicationId).toPresentation()
 	}
@@ -61,16 +64,18 @@ class ApplicationRestController(
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	fun deleteApplication(
 		@PathVariable applicationId: String,
+		@PathVariable userId: String,
 	) {
-		deleteApplicationUseCase.deleteById(applicationId)
+		deleteApplicationUseCase.deleteById(applicationId, userId)
 	}
 
 	@PatchMapping("/{applicationId}/secret-key")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	fun refreshSecretKey(
-		@PathVariable applicationId: String
+		@PathVariable applicationId: String,
+		@PathVariable userId: String
 	) {
-		secretKeyRefreshUseCase.refreshKeyById(applicationId)
+		secretKeyRefreshUseCase.refreshKeyById(applicationId, userId)
 	}
 
 }

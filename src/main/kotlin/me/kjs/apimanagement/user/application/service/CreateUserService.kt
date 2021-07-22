@@ -6,7 +6,7 @@ import me.kjs.apimanagement.user.application.port.`in`.UserForm
 import me.kjs.apimanagement.user.application.port.out.FindEmailPort
 import me.kjs.apimanagement.user.application.port.out.PasswordEncoder
 import me.kjs.apimanagement.user.application.port.out.RecordUserPort
-import me.kjs.apimanagement.user.domain.User
+import me.kjs.apimanagement.user.domain.core.User
 import org.springframework.stereotype.Service
 
 @Service

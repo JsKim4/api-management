@@ -4,7 +4,7 @@ import me.kjs.apimanagement.user.application.port.out.DeleteUserPort
 import me.kjs.apimanagement.user.application.port.out.FindEmailPort
 import me.kjs.apimanagement.user.application.port.out.FindUserPort
 import me.kjs.apimanagement.user.application.port.out.RecordUserPort
-import me.kjs.apimanagement.user.domain.User
+import me.kjs.apimanagement.user.domain.core.User
 
 class TestUserAdapter : RecordUserPort, FindUserPort, DeleteUserPort, FindEmailPort {
 

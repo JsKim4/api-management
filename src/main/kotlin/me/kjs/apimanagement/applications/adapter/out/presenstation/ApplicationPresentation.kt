@@ -15,7 +15,7 @@ interface ApplicationPresentation {
 			val title: String,
 			val content: String
 		) {
-			fun toForm() = ApplicationForm.Create.Request(title, content)
+			fun toFormWith(userId: String) = ApplicationForm.Create.Request(title, content, userId)
 		}
 
 	}

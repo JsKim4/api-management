@@ -5,7 +5,7 @@ import me.kjs.apimanagement.applications.application.port.`in`.UnUseProductAtApp
 import me.kjs.apimanagement.applications.application.port.`in`.UseProductAtApplicationUseCase
 import me.kjs.apimanagement.applications.application.port.out.FindOneApplicationPort
 import me.kjs.apimanagement.applications.application.port.out.RecordApplicationPort
-import me.kjs.apimanagement.applications.domain.ApplicationProduct
+import me.kjs.apimanagement.applications.domain.product.ApplicationProduct
 import me.kjs.apimanagement.product.domain.ProductCode
 import org.springframework.stereotype.Service
 
@@ -18,6 +18,7 @@ class ProductAtApplicationService(
 	override fun unUseProductAtApplication(productCode: ProductCode, applicationId: String) {
 		val application = findOneApplicationPort.findById(applicationId) ?: TODO()
 		application.unUseProduct(productCode)
+		recordApplicationPort.recordApplication(application)
 	}
 
 	override fun useProductAtApplication(request: ApplicationProductForm.Create.Request): ApplicationProductForm.Create.Response? {

@@ -4,7 +4,6 @@ import me.kjs.apimanagement.user.domain.vo.Token
 import java.time.LocalDateTime
 
 class UserAuth(
-	private val user: User,
 	private val clientId: String,
 	token: Token
 ) {

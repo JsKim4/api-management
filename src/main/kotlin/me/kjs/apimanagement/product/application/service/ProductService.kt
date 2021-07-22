@@ -7,7 +7,6 @@ import me.kjs.apimanagement.product.application.port.`in`.PutProductUseCase
 import me.kjs.apimanagement.product.application.port.out.FindAllProductPort
 import me.kjs.apimanagement.product.application.port.out.FindOneProductPort
 import me.kjs.apimanagement.product.application.port.out.PutProductPort
-import me.kjs.apimanagement.product.domain.IProduct
 import me.kjs.apimanagement.product.domain.Product
 import me.kjs.apimanagement.product.domain.ProductCode
 import org.springframework.stereotype.Service
@@ -26,7 +25,7 @@ class ProductService(
 		return findOneProductPort.findByCode(productCode).toSimpleForm()
 	}
 
-	fun IProduct.toSimpleForm() = ProductForm.Find.Response.Simple(productCode, title, content)
+	fun Product.toSimpleForm() = ProductForm.Find.Response.Simple(productCode, title, content)
 
 	override fun putProduct(request: ProductForm.Put.Request) {
 		findOneProductPort.findByCode(request.productCode)

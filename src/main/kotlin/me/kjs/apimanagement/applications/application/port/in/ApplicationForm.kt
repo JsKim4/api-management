@@ -21,10 +21,12 @@ interface ApplicationForm {
 	interface Create {
 		data class Request(
 			val title: String,
-			val content: String
+			val content: String,
+			val userId: String
 		)
 
 		data class Response(
+			val id: String,
 			val title: String,
 			val content: String,
 			val clientId: String,
